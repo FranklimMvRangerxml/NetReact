@@ -6,9 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// CORS
+// 🔹 CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -19,15 +20,15 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Conexión a Neon PostgreSQL
+// 🔹 Conexión a PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration
            .GetConnectionString("DefaultConnection")));
 
-// Registrar AuthService
+// 🔹 Servicios
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// JWT
+// 🔹 JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -44,35 +45,36 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Controladores + Vistas (React)
+// 🔹 Controllers + React
 builder.Services.AddControllersWithViews();
 
-// Swagger
+// 🔹 Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ❌ ELIMINA el bloque if Development que tenías antes
-// Swagger siempre activo
+// 🔥 Swagger en /swagger (NO en /)
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarritoNet API v1");
-    c.RoutePrefix = string.Empty;
+    c.RoutePrefix = "swagger"; // 👈 AQUÍ ESTÁ LA CLAVE
 });
 
+// 🔹 Middlewares
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Rutas API
+// 🔹 Rutas API
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
+// 🔥 React SPA (muy importante que quede al final)
 app.MapFallbackToFile("index.html");
 
 app.Run();
