@@ -56,15 +56,19 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // ✅ Pipeline HTTP
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
-}
-else
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// ✅ Después — siempre activo
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarritoNet API v1");
+    c.RoutePrefix = string.Empty; // ← abre Swagger en la ruta raíz "/"
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
