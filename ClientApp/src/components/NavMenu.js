@@ -36,8 +36,15 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} className="text-dark" to="/counter">Enpoints</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to="https://netreact-production.up.railway.app/">Swagger</NavLink>
-              </NavItem>
+  <a
+    className="nav-link text-dark"
+    href="https://netreact-production.up.railway.app/swagger"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Swagger
+  </a>
+</NavItem>
             </ul>
           </Collapse>
         </Navbar>
