@@ -1,4 +1,4 @@
-# 🛒 CarritoNet
+# 🛒 Login Net
 
 Sistema de gestión de usuarios, sedes y planes construido con **ASP.NET Core 8** + **React** + **PostgreSQL (Neon)**.
 
